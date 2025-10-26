@@ -1,7 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { Home, User, Settings, Menu } from "lucide-vue-next";
+import {
+  Home,
+  User,
+  Settings,
+  Menu,
+  MessageCircle,
+  Timer,
+  Search,
+} from "lucide-vue-next";
 import ThemeToggle from "@/components/ThemeToggle.vue";
 
 const router = useRouter();
@@ -10,6 +18,8 @@ const sidebarOpen = ref(false);
 
 const menuItems = [
   { icon: Home, path: "/home" },
+  { icon: MessageCircle, path: "/inbox" },
+  { icon: Timer, path: "/capsule" },
   { icon: User, path: "/profile" },
   { icon: Settings, path: "/settings" },
 ];
@@ -24,7 +34,7 @@ const isActive = (path) => route.path === path;
 onMounted(() => {
   // console.log("Current route:", route.path);
   // console.log("isActive", isActive(route.path));
-})
+});
 </script>
 
 <template>
@@ -33,36 +43,45 @@ onMounted(() => {
   >
     <!-- Sidebar (Desktop) -->
     <aside
-      class="hidden md:flex sticky top-0 h-screen w-16 bg-theme-menu border-r border-color backdrop-blur-none transition-colors duration-300 flex-col items-center py-4"
+      class="hidden md:flex sticky top-0 h-screen w-16 bg-theme-menu backdrop-blur-none transition-colors duration-300 flex-col items-center py-4"
     >
-      <ul class="flex flex-col gap-4">
-        <li
-          v-for="item in menuItems"
-          :key="item.path"
-          @click="navigate(item.path)"
-          :class="[
-            'p-3 rounded-lg cursor-pointer transition-colors duration-200',
-            isActive(item.path)
-              ? 'bg-theme-menu-hover text-primary'
-              : 'glass-text',
-          ]"
-        >
-          <component :is="item.icon" class="w-6 h-6" />
-        </li>
-        <li class="flex items-center justify-center mt-auto">
+      <ul class="flex flex-col justify-between h-full w-full items-center">
+        <!-- กลุ่มเมนูบน -->
+        <div class="flex flex-col gap-4 mt-4">
+          <li class="flex items-center justify-center">
+            <Search class="w-6 h-6 text-content" />
+          </li>
+          <li
+            v-for="item in menuItems"
+            :key="item.path"
+            @click="navigate(item.path)"
+            :class="[
+              'p-3 rounded-lg cursor-pointer transition-colors duration-200 flex justify-center',
+              isActive(item.path)
+                ? 'bg-theme-menu-hover text-primary'
+                : 'glass-text',
+            ]"
+          >
+            <component :is="item.icon" class="w-6 h-6" />
+          </li>
+        </div>
+
+        <!-- ปุ่ม ThemeToggle อยู่ล่างสุด -->
+        <li class="flex items-center justify-center mb-4">
           <ThemeToggle />
         </li>
       </ul>
     </aside>
 
     <!-- Mobile Top Bar -->
+     <!-- bg-theme-menu -->
     <header
-      class="md:hidden fixed top-0 left-0 right-0 h-12 bg-theme-menu border-b border-color flex items-center justify-between px-4 z-50"
+      class="md:hidden fixed top-0 left-0 right-0 h-14 bg-theme-menu border-b border-color flex items-center justify-between px-4 z-50"
     >
       <button @click="sidebarOpen = !sidebarOpen" class="text-content">
         <Menu class="w-6 h-6 text-content" />
       </button>
-      <ThemeToggle />
+      <Search class="w-6 h-6 text-content" />
     </header>
 
     <!-- Mobile Sidebar Overlay -->
@@ -80,27 +99,34 @@ onMounted(() => {
         v-if="sidebarOpen"
         class="fixed top-0 left-0 h-full w-48 bg-theme-menu border-r border-color p-4 flex flex-col gap-4 z-50"
       >
-        <ul>
-          <li
-            v-for="item in menuItems"
-            :key="item.path"
-            @click="navigate(item.path)"
-            :class="[
-              'flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors duration-200',
-              isActive(item.path)
-                ? 'bg-theme-menu-hover text-primary'
-                : 'glass-text',
-            ]"
-          >
-            <component :is="item.icon" class="w-5 h-5" />
-            <span>{{ item.path.replace("/", "") || "Home" }}</span>
+        <ul class="flex flex-col justify-between h-full w-full">
+          <div class="flex flex-col">
+            <li
+              v-for="item in menuItems"
+              :key="item.path"
+              @click="navigate(item.path)"
+              :class="[
+                'flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors duration-200',
+                isActive(item.path)
+                  ? 'bg-theme-menu-hover text-primary'
+                  : 'glass-text',
+              ]"
+            >
+              <component :is="item.icon" class="w-5 h-5" />
+              <span>{{
+                item.path.replace("/", "").toLocaleUpperCase() || "Home"
+              }}</span>
+            </li>
+          </div>
+          <li class="flex items-center justify-center mb-4">
+            <ThemeToggle />
           </li>
         </ul>
       </aside>
     </transition>
 
     <!-- Content -->
-    <main class="flex-1 p-4 overflow-y-auto mt-10 md:mt-0">
+    <main class="flex-1 p-4 overflow-y-auto mt-10 md:mt-0 bg-boxes">
       <slot />
     </main>
   </div>
