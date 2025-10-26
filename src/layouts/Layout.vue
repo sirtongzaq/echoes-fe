@@ -15,6 +15,8 @@ import ThemeToggle from "@/components/ThemeToggle.vue";
 const router = useRouter();
 const route = useRoute();
 const sidebarOpen = ref(false);
+const showSearch = ref(false);
+const query = ref("");
 
 const menuItems = [
   { icon: Home, path: "/home" },
@@ -30,6 +32,9 @@ const navigate = (path) => {
 };
 
 const isActive = (path) => route.path === path;
+
+const openSearch = () => (showSearch.value = true);
+const closeSearch = () => (showSearch.value = false);
 
 onMounted(() => {
   // console.log("Current route:", route.path);
@@ -48,7 +53,10 @@ onMounted(() => {
       <ul class="flex flex-col justify-between h-full w-full items-center">
         <!-- กลุ่มเมนูบน -->
         <div class="flex flex-col gap-4 mt-4">
-          <li class="flex items-center justify-center">
+          <li
+            class="flex items-center justify-center cursor-pointer"
+            @click="openSearch"
+          >
             <Search class="w-6 h-6 text-content" />
           </li>
           <li
@@ -74,14 +82,14 @@ onMounted(() => {
     </aside>
 
     <!-- Mobile Top Bar -->
-     <!-- bg-theme-menu -->
+    <!-- bg-theme-menu -->
     <header
       class="md:hidden fixed top-0 left-0 right-0 h-14 bg-theme-menu border-b border-color flex items-center justify-between px-4 z-50"
     >
       <button @click="sidebarOpen = !sidebarOpen" class="text-content">
         <Menu class="w-6 h-6 text-content" />
       </button>
-      <Search class="w-6 h-6 text-content" />
+      <Search class="w-6 h-6 text-content cursor-pointer" @click="openSearch" />
     </header>
 
     <!-- Mobile Sidebar Overlay -->
@@ -123,6 +131,36 @@ onMounted(() => {
           </li>
         </ul>
       </aside>
+    </transition>
+
+    <transition name="fade">
+      <div
+        v-if="showSearch"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-start pt-24 z-50"
+        @click.self="closeSearch"
+      >
+        <!-- search box -->
+        <div
+          class="bg-theme border border-color rounded-2xl w-[90%] max-w-xl p-4 shadow-lg transition-all"
+        >
+          <input
+            v-model="query"
+            type="text"
+            placeholder="Search anything..."
+            class="w-full p-3 rounded-lg bg-base-200 border border-color text-content focus:outline-none outline-none"
+          />
+          <div class="mt-3 max-h-64 overflow-y-auto flex flex-col gap-2">
+            <div
+              v-if="query.length"
+              v-for="n in 5"
+              :key="n"
+              class="p-3 rounded-lg glass hover:bg-theme-menu-hover transition"
+            >
+              🔍 Result item #{{ n }} for "{{ query || "your search" }}"
+            </div>
+          </div>
+        </div>
+      </div>
     </transition>
 
     <!-- Content -->

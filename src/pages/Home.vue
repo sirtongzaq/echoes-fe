@@ -3,7 +3,7 @@
 import ThemeToggle from "@/components/ThemeToggle.vue";
 import Layout from "@/layouts/Layout.vue";
 import { ref } from "vue";
-import { PlusCircle } from "lucide-vue-next";
+import { Heart, MessageCircle, Repeat2 } from "lucide-vue-next";
 
 const showPostModal = ref(false);
 
@@ -32,13 +32,17 @@ const closePostModal = () => (showPostModal.value = false);
               class="bg-base-200 text-left flex-1 rounded-xl cursor-pointer p-2"
               @click="openPostModal"
             >
-              What's on your mind?, User
+              What's on your mind, User?
             </button>
           </div>
-          <div class="flex border-t border-color-content justify-around">
-            <div class="size-15 bg-amber-100 mt-4"></div>
-            <div class="size-15 bg-amber-400 mt-4"></div>
-            <div class="size-15 bg-amber-800 mt-4"></div>
+          <div class="border-color-content rounded-xl"></div>
+          <div class="flex justify-around">
+            <button class="button-glass w-full gap-2 justify-center">
+              <span class="text-error">●</span> Live Video
+            </button>
+            <button class="button-glass w-full gap-2 justify-center">
+              <span class="text-success">●</span> Photo/Video
+            </button>
           </div>
         </div>
 
@@ -60,6 +64,18 @@ const closePostModal = () => (showPostModal.value = false);
               This is a sample post content #{{ n }} — you can replace it with
               real feed data.
             </p>
+            <div class="w-full h-48 bg-base-200 rounded-lg"></div>
+            <div class="flex justify-between text-small gap-1">
+              <button class="button-glass w-full gap-1">
+                <span><Heart /></span> Like
+              </button>
+              <button class="button-glass w-full gap-1">
+                <span class="-scale-x-100"><MessageCircle /></span>Comment
+              </button>
+              <button class="button-glass w-full gap-1">
+                <span><Repeat2 /></span>Repost
+              </button>
+            </div>
           </div>
         </div>
       </main>
@@ -76,7 +92,7 @@ const closePostModal = () => (showPostModal.value = false);
           <h2 class="text-xl font-semibold">Create Post</h2>
           <textarea
             rows="4"
-            placeholder="What's on your mind?"
+            placeholder="What's on your mind, User?"
             class="w-full p-3 rounded-lg bg-theme border border-color focus:outline-none"
           />
           <div class="flex justify-end gap-2">
