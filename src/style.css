@@ -137,6 +137,12 @@
   transition: border-color 0.3s;
 }
 
+.border-dashed-content {
+  border: 2px dashed;
+  border-color: var(--color-base-300);
+  transition: border-color 0.3s;
+}
+
 .text-primary {
   color: var(--color-primary);
 }
