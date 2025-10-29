@@ -61,7 +61,7 @@ window.addEventListener("resize", () => {
   <Transition name="fade">
     <div
       v-if="modelValue"
-      class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+      class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
       @click.self="close"
     >
       <div
@@ -70,7 +70,7 @@ window.addEventListener("resize", () => {
         <!-- ปุ่ม Close -->
         <button
           @click="close"
-          class="!absolute top-4 right-3 button-glass transition"
+          class="absolute! top-4 right-3 button-glass transition"
         >
           <X class="w-5 h-5" />
         </button>
@@ -120,3 +120,14 @@ window.addEventListener("resize", () => {
     </div>
   </Transition>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
